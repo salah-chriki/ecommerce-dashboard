@@ -35,9 +35,8 @@ export const ApiAlert: React.FC<ApiAlertProps> = ({
         {title}
         <Badge variant={variantMap[variant]}>{textMap[variant]}</Badge>
       </AlertTitle>
-      <AlertDescription className="flex items-center justify-between mt-6">
-        <code className="relative rounded bg-muted font-mono text-sm">
-          {" "}
+      <AlertDescription className="flex items-center justify-between  mt-4">
+        <code className="relative rounded px-[0.3rem] py-[0.2rem] bg-muted font-mono text-sm">
           {description}
         </code>
         <Button variant="outline" size="sm" onClick={onCopy}>
