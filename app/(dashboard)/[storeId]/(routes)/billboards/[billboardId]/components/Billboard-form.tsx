@@ -24,15 +24,16 @@ import { Input } from "@/components/ui/input";
 import { useParams, useRouter } from "next/navigation";
 import { ApiAlert } from "@/components/ui/api-alert";
 import { useOrigin } from "@/hooks/use-origin";
-
-interface BillboardFormProps {
-  initialData: Billboard | null;
-}
+import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
   label: z.string().min(1),
   imageUrl: z.string().min(1),
 });
+
+interface BillboardFormProps {
+  initialData: Billboard | null;
+}
 
 const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const params = useParams();
@@ -54,17 +55,21 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const description = initialData
     ? "Edit a Billboard"
     : "Create a new Billboard";
-  const action = initialData ? "Add" : "Create";
-  const toastMessage = initialData ? "Billboard added." : "Billboard created.";
+  const action = initialData ? "Save Changes" : "Create";
+  const toastMessage = initialData ? "Billboard edited." : "Billboard created.";
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
+      if (initialData) {
+        await axios.patch(
+          `/api/stores/${params?.storeId}/billboards/${params.billboardId}`,
+          values
+        );
+      } else {
+        await axios.post(`/api/stores/${params?.storeId}/billboards`, values);
+      }
 
-      const response = await axios.patch(
-        `/api/stores/${initialData?.id}`,
-        values
-      );
       router.refresh();
       toast.success(toastMessage);
     } catch (error) {
@@ -77,29 +82,22 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      const response = await axios.delete(`/api/stores/${initialData?.id}`);
-
-      toast.success("store deleted");
+      if (initialData) {
+        await axios.delete(
+          `/api/stores/${params?.storeId}/billboards/${params?.billboardId}`
+        );
+      }
       router.refresh();
-      // router.push("/");
+      toast.success("Billboard deleted");
     } catch (error) {
       toast.error("make sure to delete all products and categories first");
     } finally {
       setLoading(false);
-      setOpen(false);
     }
   };
 
   return (
     <>
-      {/* <AlertModal
-        isOpen={open}
-        loading={loading}
-        onClose={() => {
-          setOpen(false);
-        }}
-        onConfirm={() => onDelete()}
-      /> */}
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         <div>
@@ -108,7 +106,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
               disabled={loading}
               variant="destructive"
               size="icon"
-              onClick={() => setOpen(true)}
+              onClick={onDelete}
             >
               <Trash className="h-4 w-4" />
             </Button>
@@ -120,6 +118,24 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
         <div className="space-y-4 py-2 pb-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
+              <FormField
+                control={form.control}
+                name="imageUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Billboard image</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value ? [field.value] : []}
+                        onRemove={() => field.onChange("")}
+                        onchange={(url) => field.onChange(url)}
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="grid grid-cols-3 gap-8">
                 <FormField
                   control={form.control}
@@ -144,14 +160,9 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
               </Button>
             </form>
           </Form>
+          <Separator />
         </div>
       </div>
-      <Separator />
-      <ApiAlert
-        title="NEXT_PUBLIC_API_URL"
-        description={`${origin}/api/${params.storeId}`}
-        variant="public"
-      />
     </>
   );
 };
