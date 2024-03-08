@@ -36,7 +36,7 @@ import {
 
 const formSchema = z.object({
   name: z.string().min(1),
-  billboardName: z
+  billboardId: z
     .string({
       required_error: "Please select a billboard to display.",
     })
@@ -62,7 +62,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
-      billboardName: "",
+      billboardId: "",
     },
   });
 
@@ -102,8 +102,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
         );
       }
       router.push(`/${params.storeId}/categories`);
-      toast.success("Billboard deleted");
       router.refresh();
+      toast.success("Billboard deleted");
     } catch (error) {
       toast.error("make sure to delete all products and categories first");
     } finally {
@@ -160,7 +160,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
                 />
                 <FormField
                   control={form.control}
-                  name="billboardName"
+                  name="billboardId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Billboard</FormLabel>

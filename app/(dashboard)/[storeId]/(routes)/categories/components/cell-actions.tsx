@@ -70,7 +70,7 @@ const CellActions: React.FC<CellActionsProps> = ({ data }) => {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/${params.storeId}/billboards/${data.id}`)
+              router.push(`/${params.storeId}/categories/${data.id}`)
             }
           >
             <SquarePen className="mr-2 w-4 h-4" />

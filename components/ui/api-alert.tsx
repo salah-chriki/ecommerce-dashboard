@@ -29,7 +29,7 @@ export const ApiAlert: React.FC<ApiAlertProps> = ({
     toast.success("coppied to clipboard.");
   };
   return (
-    <Alert>
+    <Alert className="my-3">
       <Server className="h-4 w-4" />
       <AlertTitle className="flex items-center gap-x-2">
         {title}

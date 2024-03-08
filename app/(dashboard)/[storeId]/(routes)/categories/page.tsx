@@ -18,7 +18,7 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
     id: category.id,
     name: category.name,
     createdAt: format(category.createdAt, "MMMM do, yyyy"),
-    billboard: category.billboard,
+    billboardLabel: category.billboard.label,
   }));
   return (
     <div className="flex-col">

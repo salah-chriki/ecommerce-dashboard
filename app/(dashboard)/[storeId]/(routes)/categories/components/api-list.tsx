@@ -11,7 +11,7 @@ const ApiList = () => {
   const params = useParams();
   return (
     <div className="mt-3">
-      <Heading title="API" description="API calls for billboards" />
+      <Heading title="API" description="API calls for categories" />
       <Separator />
       <ApiAlert
         title="GET"

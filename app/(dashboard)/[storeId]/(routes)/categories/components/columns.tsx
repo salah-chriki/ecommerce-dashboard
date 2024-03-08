@@ -9,7 +9,7 @@ export type CategoryColumn = {
   id: string;
   name: string;
   createdAt: string;
-  billboard: Billboard;
+  billboardLabel: string;
 };
 
 export const columns: ColumnDef<CategoryColumn>[] = [
@@ -18,7 +18,7 @@ export const columns: ColumnDef<CategoryColumn>[] = [
     header: "Name",
   },
   {
-    accessorKey: "billboard",
+    accessorKey: "billboardLabel",
     header: "Billboard",
   },
   {
