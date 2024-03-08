@@ -25,6 +25,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ApiAlert } from "@/components/ui/api-alert";
 import { useOrigin } from "@/hooks/use-origin";
 import ImageUpload from "@/components/ui/image-upload";
+import { AlertModal } from "../../../settings/components/alert-modal";
 
 const formSchema = z.object({
   label: z.string().min(1),
@@ -38,7 +39,6 @@ interface BillboardFormProps {
 const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
-  const origin = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -70,6 +70,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
         await axios.post(`/api/stores/${params?.storeId}/billboards`, values);
       }
 
+      router.push(`/${params?.storeId}/billboards`);
       router.refresh();
       toast.success(toastMessage);
     } catch (error) {
@@ -87,17 +88,25 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
           `/api/stores/${params?.storeId}/billboards/${params?.billboardId}`
         );
       }
-      router.refresh();
+      router.push(`/${params.storeId}/billboards`);
       toast.success("Billboard deleted");
+      router.refresh();
     } catch (error) {
       toast.error("make sure to delete all products and categories first");
     } finally {
       setLoading(false);
+      setOpen(false);
     }
   };
 
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        loading={loading}
+      />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         <div>
@@ -106,7 +115,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
               disabled={loading}
               variant="destructive"
               size="icon"
-              onClick={onDelete}
+              onClick={() => setOpen(true)}
             >
               <Trash className="h-4 w-4" />
             </Button>
