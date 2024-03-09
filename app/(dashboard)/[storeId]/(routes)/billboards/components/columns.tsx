@@ -1,18 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Copy, MoreHorizontal } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useParams } from "next/navigation";
 import CellActions from "./cell-actions";
 
 export type BillboardColumn = {

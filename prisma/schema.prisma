@@ -12,8 +12,10 @@ model Store {
   id         String      @id @default(uuid())
   name       String
   userId     String
-  billboards Billboard[] @relation("storeToBillboard")
-  categories Category[]  @relation("storeToCategory")
+  billboards Billboard[] @relation("StoreToBillboard")
+  categories Category[]  @relation("StoreToCategory")
+  products   Product[]   @relation("StoreToProduct")
+  orders     Order[]     @relation("StoreToOrder")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
@@ -21,7 +23,7 @@ model Store {
 model Billboard {
   id         String     @id @default(uuid())
   storeId    String
-  store      Store      @relation("storeToBillboard", fields: [storeId], references: [id])
+  store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
   categories Category[]
   label      String
   imageUrl   String
@@ -34,13 +36,59 @@ model Billboard {
 model Category {
   id          String    @id @default(uuid())
   storeId     String
-  store       Store     @relation("storeToCategory", fields: [storeId], references: [id])
+  store       Store     @relation("StoreToCategory", fields: [storeId], references: [id])
   billboardId String
   billboard   Billboard @relation(fields: [billboardId], references: [id])
+  products    Product[] @relation("CategoryToProduct")
   name        String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([storeId])
   @@index([billboardId])
+}
+
+model Product {
+  id         String      @id @default(uuid())
+  storeId    String
+  store      Store       @relation("StoreToProduct", fields: [storeId], references: [id])
+  categoryId String
+  category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  orderItems OrderItem[]
+  name       String
+  price      Decimal
+  isFeatured Boolean
+  isArchived Boolean
+  imageUrl   String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([storeId])
+  @@index([categoryId])
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  storeId    String
+  store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems OrderItem[]
+  email      String
+  fullName   String
+  opgg       String
+  isPaid     Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([storeId])
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+  @@index([orderId])
 }

@@ -3,14 +3,13 @@
 import { Button } from "@/components/ui/button";
 import Heading from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { DataTable } from "./data-table";
 
 import { useParams, useRouter } from "next/navigation";
 
 import { Plus } from "lucide-react";
-import ApiList from "./api-list";
 import { CategoryColumn, columns } from "./columns";
-import { Billboard } from "@prisma/client";
+import ApiList from "@/components/ui/api-list";
+import { DataTable } from "@/components/ui/data-table";
 
 export type CategoryClientProps = {
   data: CategoryColumn[];
@@ -35,9 +34,9 @@ const CategoryClient: React.FC<CategoryClientProps> = ({ data }) => {
       </div>
       <Separator />
       <div>
-        <DataTable columns={columns} data={data} />
+        <DataTable searchKey="name" columns={columns} data={data} />
         <Separator />
-        <ApiList />
+        <ApiList entityName="categories" entityIdName="categoryId" />
       </div>
     </>
   );

@@ -40,7 +40,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             <div className="z-10 absolute top-2 right-2">
               <Button
                 type="button"
-                onClick={() => onRemove}
+                onClick={() => onRemove(url)}
                 variant="destructive"
                 size="icon"
               >
