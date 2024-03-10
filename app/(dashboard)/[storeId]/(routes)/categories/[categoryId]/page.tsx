@@ -1,5 +1,6 @@
 import prismadb from "@/lib/prismadb";
 import CategoryForm from "./components/category-form";
+import { get } from "http";
 
 const CategoryPage = async ({ params }: { params: { categoryId: string } }) => {
   const categories = await prismadb.category.findUnique({
@@ -19,3 +20,5 @@ const CategoryPage = async ({ params }: { params: { categoryId: string } }) => {
 };
 
 export default CategoryPage;
+
+// i want to nextjs Incremental Static Regeneration (ISR) to be used here

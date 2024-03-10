@@ -8,7 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { BillboardColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { Copy, MoreHorizontal, SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
@@ -16,9 +15,10 @@ import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "../../settings/components/alert-modal";
 import { useState } from "react";
 import axios from "axios";
+import { OrderColumn } from "./columns";
 
 type CellActionsProps = {
-  data: BillboardColumn;
+  data: OrderColumn;
 };
 
 const CellActions: React.FC<CellActionsProps> = ({ data }) => {
